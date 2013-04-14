@@ -1,1 +1,3 @@
-//= require_tree .
+$(document).ready(function(){
+    $("#table-of-contents").appendTo("aside");
+});

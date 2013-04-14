@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<!--[if IE 8]>         <html class="no-js lt-ie9" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width" />
+  <title>Ramblings and Miscellany</title>
+
+  <link rel="stylesheet" href="stylesheets/normalize.css" />
+  <link rel="stylesheet" href="stylesheets/front.css" />
+  <link href='http://fonts.googleapis.com/css?family=Merriweather:400,700|Old+Standard+TT:400,700' rel='stylesheet' type='text/css'>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script src="js/vendor/custom.modernizr.js"></script>
+  <script src="js/vendor/zepto.js"></script>
+</head>
+
+  <body>
+
+  <div class="row">
+  <div class="small-10 large-10 large-centered small-centered columns wrapper">
+
+    <div class="header">
+      <%= tag :img, :src => "/images/logo_large.gif" %>
+      <h4>Ramblings and miscellany regarding </h4>
+      <h1 id="header">Bioinformatics and Fungal Genomics</h1>
+      <h4>Robert Syme</h4>
+    </div>
+
+    <nav id="front-nav">
+    <ul>
+      <li><a href="#">Blog</a></li>
+      <li><a href="#">Slides</a></li>
+      <li><a href="#">Papers</a></li>
+      <li><a href="#">About</a></li>
+    </ul>
+    </nav>
+    
+
+    <div class="content">
+      <%= yield %>
+  </div>
+</div>
+  <script src="js/foundation/foundation.js"></script>
+  <script src="js/foundation/foundation.alerts.js"></script>
+  <script src="js/foundation/foundation.clearing.js"></script>
+  <script src="js/foundation/foundation.cookie.js"></script>
+  <script src="js/foundation/foundation.dropdown.js"></script>
+  <script src="js/foundation/foundation.forms.js"></script>
+  <script src="js/foundation/foundation.joyride.js"></script>
+  <script src="js/foundation/foundation.magellan.js"></script>
+  <script src="js/foundation/foundation.orbit.js"></script>
+  <script src="js/foundation/foundation.placeholder.js"></script>
+  <script src="js/foundation/foundation.reveal.js"></script>
+  <script src="js/foundation/foundation.section.js"></script>
+  <script src="js/foundation/foundation.tooltips.js"></script>
+  <script src="js/foundation/foundation.topbar.js"></script>
+  <script>
+  $(document).foundation();
+  </script>
+  
+</body>
+</html>

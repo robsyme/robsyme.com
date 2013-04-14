@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<!--[if IE 8]>         <html class="no-js lt-ie9" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>Ramblings and Miscellany</title>
+
+    <link rel="stylesheet" href="/stylesheets/normalize.css" />
+    <link rel="stylesheet" href="/stylesheets/post.css" />
+    <link rel="stylesheet" href="/stylesheets/org-code.css" />
+    <link href='http://fonts.googleapis.com/css?family=Merriweather:400,700|Old+Standard+TT:400,700' rel='stylesheet' type='text/css'>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script src="/javascripts/vendor/custom.modernizr.js"></script>
+    <script src="/javascripts/vendor/waypoints.js"></script>
+    <script src="/javascripts/vendor/zepto.js"></script>
+    <script src="/javascripts/post.js"></script>
+  </head>
+
+  <body>
+    <div class="row">
+
+      <!-- Sidebar -->
+      <aside id="sidebar" class="large-4 columns">
+        <%= image_tag '/images/logo_large.gif', :id => 'logo' %>
+        <br>
+        <nav>
+          <div class="row side-navigation text-center">
+            <div class="small-6 large-3 columns"><a href="#">Blog</a></div>
+            <div class="small-6 large-3 columns"><a href="#">Slides</a></div>
+            <div class="small-6 large-3 columns"><a href="#">Papers</a></div>
+            <div class="small-6 large-3 columns"><a href="#">About</a></div>
+          </div>
+        </nav> 
+      </aside>
+      <!-- End Sidebar -->
+
+      <div class="large-offset-5 large-8 columns" id="content" role="content">
+        <%= yield %>
+      </div>
+      
+    </div>
+
+    <script src="/javascripts/foundation/foundation.js"></script>
+    <script src="/javascripts/foundation/foundation.alerts.js"></script>
+    <script src="/javascripts/foundation/foundation.clearing.js"></script>
+    <script src="/javascripts/foundation/foundation.cookie.js"></script>
+    <script src="/javascripts/foundation/foundation.dropdown.js"></script>
+    <script src="/javascripts/foundation/foundation.forms.js"></script>
+    <script src="/javascripts/foundation/foundation.joyride.js"></script>
+    <script src="/javascripts/foundation/foundation.magellan.js"></script>
+    <script src="/javascripts/foundation/foundation.orbit.js"></script>
+    <script src="/javascripts/foundation/foundation.placeholder.js"></script>
+    <script src="/javascripts/foundation/foundation.reveal.js"></script>
+    <script src="/javascripts/foundation/foundation.section.js"></script>
+    <script src="/javascripts/foundation/foundation.tooltips.js"></script>
+    <script src="/javascripts/foundation/foundation.topbar.js"></script>
+    <script>
+      $(document).foundation();
+    </script>
+    
+  </body>
+</html>

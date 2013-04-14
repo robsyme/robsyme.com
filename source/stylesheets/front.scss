@@ -1,0 +1,32 @@
+@import "app";
+
+.header {
+    border-top: 7px solid $dd-grey;
+    border-bottom: 2px solid $d-grey;
+    padding-bottom: 1em;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+.header img {
+    margin: 1em;
+    width: 20%;
+}
+
+#front-nav {
+    text-align: center;
+    float: none;
+    margin: 20px 0px;
+    border-bottom: 2px solid $d-grey;
+    text-transform: uppercase;
+}
+
+#front-nav li {
+    margin: 0px;
+    padding: 10px;
+    display: inline;
+}
+
+#front-nav a {
+    color: $l-black;
+}
