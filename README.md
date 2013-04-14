@@ -1,13 +1,8 @@
-# Middleman on Heroku
-### precompiled and served statically
+# Robsyme.com
+## Personal Homepage
 
-## Usage
+This is the source for my homepage which will be up (soon) at robsyme.com
 
-    $ git clone http://github.com/indirect/middleman-heroku-static-app.git mysite && cd mysite
-    $ bundle install && bundle exec middleman init .
-    $ git add . && git commit -m "brand new site"
-    $ heroku create && git push heroku master
+## Details
 
-The only expectation is that `middleman build` will generate your site into `./build`. That's where Rack::TryStatic will look.
-
-You can customize the 404 page that's served if TryStatic can't find a file by editing `source/404.html.erb`.
+The generation of the site is a little convoluted, but it suits the way I work. Posts are authored in emacs orgmode, which is then published to souce/ and then compiled into a static site by [Middleman](http://middlemanapp.com/) and served by [Heroku](http://heroku.com).
