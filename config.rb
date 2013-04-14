@@ -27,6 +27,11 @@
 # with_layout :admin do
 #   page "/admin/*"
 # end
+with_layout :post do
+  page "/projects/*"
+end
+
+ignore "/org/*"
 
 # Proxy (fake) files
 # page "/this-page-has-no-template.html", :proxy => "/template-file.html" do
