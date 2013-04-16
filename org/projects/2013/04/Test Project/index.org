@@ -1,6 +1,6 @@
-
-#+TITLE: Test Project
-
+#+TITLE:     Test Project
+#+AUTHOR:    Robert Syme
+#+EMAIL:     rob@robert-desktop
 
 * Introduction
 ** Foobar
@@ -31,6 +31,15 @@
           puts "WOOF!"
         end
       end
+    #+END_SRC
+
+    Here is some bash:
+
+    #+BEGIN_SRC sh
+      echo "This is a test"
+      for file in /home/rob; do
+          echo $file
+      done
     #+END_SRC
 
 * Blog Title
