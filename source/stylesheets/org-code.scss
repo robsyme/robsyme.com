@@ -5,8 +5,24 @@
     line-height: 1.2;
     padding: 15px;
     border: 1px solid;
-    border-radius: 15px;
+    border-radius: 1em;
+    background-repeat: no-repeat;
+    background-position: right top;
+    margin-bottom: 20px;
 }
+
+.src-ruby {
+    background-image: url("../images/src-ruby.png");
+}
+
+.src-sh {
+    background-image: url("../images/src-sh.png");
+}
+
+.src-python {
+    background-image: url("../images/src-python.png");
+}
+
 .org-anything-candidate-number {
     /* anything-candidate-number */
     color: #000000;
