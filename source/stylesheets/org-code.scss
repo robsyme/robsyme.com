@@ -11,6 +11,17 @@
     margin-bottom: 20px;
 }
 
+.example {
+    font-size: 0.75em;
+    background-color: rgb(199, 199, 199);
+    padding: 15px;
+    border: 1px solid rgb(160, 160, 160);
+    border-radius: 1em;
+    white-space: pre;
+    overflow: auto;
+    word-wrap: normal;
+}
+
 .src-ruby {
     background-image: url("../images/src-ruby.png");
 }
