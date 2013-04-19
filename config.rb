@@ -29,6 +29,7 @@
 # end
 with_layout :post do
   page "/projects/*"
+  page "/blog/*"
 end
 
 ignore "/org/*"
