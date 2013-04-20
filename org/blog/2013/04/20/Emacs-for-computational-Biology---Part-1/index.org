@@ -1,0 +1,167 @@
+#+BEGIN_HTML
+---
+title: Emacs for computational Biology - Part 1
+tags: emacs,lisp,orgmode,bioinformatics,reproducible,research
+description: Emacs for science
+---
+#+END_HTML
+
+* Emacs as a Lab Notebook
+
+  Keeping good records is an important part of science. When I spent
+  most of my time in the lab, all activities were recorded in a
+  physical lab notebook. This format works well when you only have a
+  few experiments per day, which can be described succinctly and the
+  results are only a few data points or a gel picture. I've found that
+  this method doesn't translate well in Bioinformatics.
+
+  One pitfall for newcomers (particularly those moving from wet-lab to
+  informatics) is to record insufficient detail. Looking back on a
+  notebook that says "Blasted sequences against genome, no hits" is not
+  particularly informative. Which sequences, which genome, exactly what
+  parameters were used? I'm obviously going to recommend GNU Emacs, so
+  lets get into my reasons
+
+* GNU Emacs Features Useful to Computational Biologists
+** Executable Notes
+   My notebook runs the analysis I write and generates results. Here
+   are two very simple examples:
+*** Executable Ruby
+
+#+BEGIN_HTML
+  <video id="vid_codeblock" class="video-js vjs-default-skin" controls
+         preload="auto" poster="resources/codeblock_snapshot.jpg"
+         data-setup="{}" width="1008" height="464">
+    <source src="resources/codeblock.mp4" type='video/mp4'>
+      <source src="resources/codeblock.webm" type='video/webm'>
+  </video>
+#+END_HTML
+    
+    When I export this notebook to html (which we'll cover soon), it
+    looks like this:
+
+    #+BEGIN_SRC ruby :exports both :results output
+      class DogClock
+        def bark
+          puts "Woof! The time is " + Time.now.to_s
+        end
+      end
+      
+      fido = DogClock.new
+      fido.bark
+    #+END_SRC
+
+    #+RESULTS:
+    : Woof! The time is 2013-04-20 23:27:23 +0800
+
+*** Executable R
+    
+    This example generates a figure that we want to include in our
+    analysis. If we include the following in out notebook:
+
+    #+BEGIN_SRC org
+      ,#+BEGIN_SRC R :file z.png :results graphics :exports both
+         library(ggplot2)
+         set.seed(1234)
+         df <- data.frame(cond = factor( rep(c("A","B"), each=200) ), 
+                          rating = c(rnorm(200),rnorm(200, mean=.8)))
+         plot <- ggplot(df, aes(x=rating, fill=cond)) + geom_histogram(binwidth=.5, alpha=.5, position="identity")
+         
+         ggsave('z.png', plot=plot)
+      ,#+END_SRC
+    #+END_SRC
+
+    The figure ('z.png') is saved and a link is created in our
+    notebook. If the notebook is exported to html, the output looks
+    something like:
+    
+    #+BEGIN_SRC R :file z.png :results graphics :exports both
+      library(ggplot2)
+      set.seed(1234)
+      df <- data.frame(cond = factor( rep(c("A","B"), each=200) ), 
+                       rating = c(rnorm(200),rnorm(200, mean=.8)))
+      plot <- ggplot(df, aes(x=rating, fill=cond)) + geom_histogram(binwidth=.5, alpha=.5, position="identity")
+      
+      ggsave('z.png', plot=plot)
+    #+END_SRC
+
+    #+RESULTS:
+    [[file:z.png]]
+
+** Literate Programming
+
+   Everybody knows that documentation is important. Emacs lets you
+   interleave detailed documentation (like this blog post) with your
+   code. Another very simple example:
+
+*** Literate R Example
+
+
+    Let's say we write some org that looks like this:
+
+    #+BEGIN_SRC org
+      Set up the environment with some example data.
+            
+      ,#+BEGIN_SRC R :session demo :tangle example.R
+        library(ggplot2)
+        set.seed(1234)
+        df <- data.frame(cond = factor( rep(c("A","B"), each=200) ), 
+                           rating = c(rnorm(200),rnorm(200, mean=.8)))
+      ,#+END_SRC
+            
+      We use plyr to iterate through and calculate the mean of each group.
+      
+      ,#+BEGIN_SRC R :session demo :tangle example.R
+        library(plyr)
+        cdf <- ddply(df, .(cond), summarise, rating.mean=mean(rating))    
+      ,#+END_SRC
+            
+      Finally, we generate the plot.
+            
+      ,#+BEGIN_SRC R :session demo :tangle example.R
+        plot <- ggplot(df, aes(x=rating, fill=cond)) +
+            geom_histogram(binwidth=.5, alpha=.5, position="identity") +
+            geom_vline(data=cdf, aes(xintercept=rating.mean,  colour=cond),
+                       linetype="dashed", size=1)
+        
+        ggsave('rexample.png', plot = plot)    
+      ,#+END_SRC
+    #+END_SRC
+
+    When Exported, it will look like this:
+          
+          
+    Set up the environment with some example data.
+
+    #+BEGIN_SRC R :session demo :tangle example.R
+      library(ggplot2)
+      set.seed(1234)
+      df <- data.frame(cond = factor( rep(c("A","B"), each=200) ), 
+                         rating = c(rnorm(200),rnorm(200, mean=.8)))
+    #+END_SRC
+
+    We use plyr to iterate through and calculate the mean of each group.
+    
+    #+BEGIN_SRC R :session demo :tangle example.R
+      library(plyr)
+      cdf <- ddply(df, .(cond), summarise, rating.mean=mean(rating))    
+    #+END_SRC
+
+    Finally, we generate the plot.
+
+    #+BEGIN_SRC R :session demo :tangle example.R
+      plot <- ggplot(df, aes(x=rating, fill=cond)) +
+          geom_histogram(binwidth=.5, alpha=.5, position="identity") +
+          geom_vline(data=cdf, aes(xintercept=rating.mean,  colour=cond),
+                     linetype="dashed", size=1)
+      
+      ggsave('rexample.png', plot = plot)    
+    #+END_SRC
+
+    
+
+*** Literate R Results
+
+    The command 'org-babel-tangle' bundles together all three pieces
+    of R and puts them into one file - [[file:example.R]].
+    

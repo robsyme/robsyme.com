@@ -1,0 +1,280 @@
+---
+title: Emacs for computational Biology - Part 1
+tags: emacs,lisp,orgmode,bioinformatics,reproducible,research
+description: Emacs for science
+---
+
+
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#sec-1">1 Emacs as a Lab Notebook</a></li>
+<li><a href="#sec-2">2 GNU Emacs Features Useful to Computational Biologists</a>
+<ul>
+<li><a href="#sec-2-1">2.1 Executable Notes</a>
+<ul>
+<li><a href="#sec-2-1-1">2.1.1 Executable Ruby</a></li>
+<li><a href="#sec-2-1-2">2.1.2 Executable R</a></li>
+</ul>
+</li>
+<li><a href="#sec-2-2">2.2 Literate Programming</a>
+<ul>
+<li><a href="#sec-2-2-1">2.2.1 Literate R Example</a></li>
+<li><a href="#sec-2-2-2">2.2.2 Literate R Results</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-1" class="outline-2">
+<h2 id="sec-1">Emacs as a Lab Notebook</h2>
+<div class="outline-text-2" id="text-1">
+
+
+<p>
+  Keeping good records is an important part of science. When I spent
+  most of my time in the lab, all activities were recorded in a
+  physical lab notebook. This format works well when you only have a
+  few experiments per day, which can be described succinctly and the
+  results are only a few data points or a gel picture. I've found that
+  this method doesn't translate well in Bioinformatics.
+</p>
+<p>
+  One pitfall for newcomers (particularly those moving from wet-lab to
+  informatics) is to record insufficient detail. Looking back on a
+  notebook that says "Blasted sequences against genome, no hits" is not
+  particularly informative. Which sequences, which genome, exactly what
+  parameters were used? I'm obviously going to recommend GNU Emacs, so
+  lets get into my reasons
+</p>
+</div>
+
+</div>
+
+<div id="outline-container-2" class="outline-2">
+<h2 id="sec-2">GNU Emacs Features Useful to Computational Biologists</h2>
+<div class="outline-text-2" id="text-2">
+
+
+</div>
+
+<div id="outline-container-2-1" class="outline-3">
+<h3 id="sec-2-1">Executable Notes</h3>
+<div class="outline-text-3" id="text-2-1">
+
+<p>   My notebook runs the analysis I write and generates results. Here
+   are two very simple examples:
+</p>
+</div>
+
+<div id="outline-container-2-1-1" class="outline-4">
+<h4 id="sec-2-1-1">Executable Ruby</h4>
+<div class="outline-text-4" id="text-2-1-1">
+
+
+
+
+  <video id="vid_codeblock" class="video-js vjs-default-skin" controls
+         preload="auto" poster="resources/codeblock_snapshot.jpg"
+         data-setup="{}" width="1008" height="464">
+    <source src="resources/codeblock.mp4" type='video/mp4'>
+      <source src="resources/codeblock.webm" type='video/webm'>
+  </video>
+
+<p>    
+    When I export this notebook to html (which we'll cover soon), it
+    looks like this:
+</p>
+
+
+
+<pre class="src src-ruby"><span class="org-keyword">class</span> <span class="org-type">DogClock</span>
+  <span class="org-keyword">def</span> <span class="org-function-name">bark</span>
+    puts <span class="org-string">"Woof! The time is "</span> + <span class="org-type">Time</span>.now.to_s
+  <span class="org-keyword">end</span>
+<span class="org-keyword">end</span>
+
+fido = <span class="org-type">DogClock</span>.new
+fido.bark
+</pre>
+
+
+<pre class="example">
+Woof! The time is 2013-04-21 01:18:01 +0800
+</pre>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-2-1-2" class="outline-4">
+<h4 id="sec-2-1-2">Executable R</h4>
+<div class="outline-text-4" id="text-2-1-2">
+
+
+<p>    
+    This example generates a figure that we want to include in our
+    analysis. If we include the following in out notebook:
+</p>
+
+
+
+<pre class="src src-org"><span class="org-org-block-begin-line">#+BEGIN_SRC R :file z.png :results graphics :exports both</span>
+<span class="org-org-block">   library(ggplot2)</span>
+<span class="org-org-block">   set.seed(1234)</span>
+<span class="org-org-block">   df &lt;- data.frame(cond = factor( rep(c("A","B"), each=200) ), </span>
+<span class="org-org-block">                    rating = c(rnorm(200),rnorm(200, mean=.8)))</span>
+<span class="org-org-block">   plot &lt;- ggplot(df, aes(x=rating, fill=cond)) + geom_histogram(binwidth=.5, alpha=.5, position="identity")</span>
+<span class="org-org-block">   </span>
+<span class="org-org-block">   ggsave('z.png', plot=plot)</span>
+<span class="org-org-block-end-line">#+END_SRC</span>
+</pre>
+
+
+<p>
+    The figure ('z.png') is saved and a link is created in our
+    notebook. If the notebook is exported to html, the output looks
+    something like:
+</p>
+
+
+
+<pre class="src src-R"><span class="org-constant">library</span>(ggplot2)
+set.seed(1234)
+df <span class="org-constant">&lt;-</span> data.frame(cond = factor( rep(c(<span class="org-string">"A"</span>,<span class="org-string">"B"</span>), each=200) ), 
+                 rating = c(rnorm(200),rnorm(200, mean=.8)))
+plot <span class="org-constant">&lt;-</span> ggplot(df, aes(x=rating, fill=cond)) + geom_histogram(binwidth=.5, alpha=.5, position=<span class="org-string">"identity"</span>)
+
+ggsave(<span class="org-string">'z.png'</span>, plot=plot)
+</pre>
+
+
+<p>
+    <img src="z.png"  alt="z.png" />
+</p>
+</div>
+</div>
+
+</div>
+
+<div id="outline-container-2-2" class="outline-3">
+<h3 id="sec-2-2">Literate Programming</h3>
+<div class="outline-text-3" id="text-2-2">
+
+
+<p>
+   Everybody knows that documentation is important. Emacs lets you
+   interleave detailed documentation (like this blog post) with your
+   code. Another very simple example:
+</p>
+
+</div>
+
+<div id="outline-container-2-2-1" class="outline-4">
+<h4 id="sec-2-2-1">Literate R Example</h4>
+<div class="outline-text-4" id="text-2-2-1">
+
+
+
+<p>
+    Let's say we write some org that looks like this:
+</p>
+
+
+
+<pre class="src src-org">Set up the environment with some example data.
+      
+<span class="org-org-block-begin-line">#+BEGIN_SRC R :session demo :tangle example.R</span>
+<span class="org-org-block">  library(ggplot2)</span>
+<span class="org-org-block">  set.seed(1234)</span>
+<span class="org-org-block">  df &lt;- data.frame(cond = factor( rep(c("A","B"), each=200) ), </span>
+<span class="org-org-block">                     rating = c(rnorm(200),rnorm(200, mean=.8)))</span>
+<span class="org-org-block-end-line">#+END_SRC</span>
+      
+We use plyr to iterate through and calculate the mean of each group.
+
+<span class="org-org-block-begin-line">#+BEGIN_SRC R :session demo :tangle example.R</span>
+<span class="org-org-block">  library(plyr)</span>
+<span class="org-org-block">  cdf &lt;- ddply(df, .(cond), summarise, rating.mean=mean(rating))    </span>
+<span class="org-org-block-end-line">#+END_SRC</span>
+      
+Finally, we generate the plot.
+      
+<span class="org-org-block-begin-line">#+BEGIN_SRC R :session demo :tangle example.R</span>
+<span class="org-org-block">  plot &lt;- ggplot(df, aes(x=rating, fill=cond)) +</span>
+<span class="org-org-block">      geom_histogram(binwidth=.5, alpha=.5, position="identity") +</span>
+<span class="org-org-block">      geom_vline(data=cdf, aes(xintercept=rating.mean,  colour=cond),</span>
+<span class="org-org-block">                 linetype="dashed", size=1)</span>
+<span class="org-org-block">  </span>
+<span class="org-org-block">  ggsave('rexample.png', plot = plot)    </span>
+<span class="org-org-block-end-line">#+END_SRC</span>
+</pre>
+
+
+<p>
+    When Exported, it will look like this:
+</p>
+
+<p>          
+    Set up the environment with some example data.
+</p>
+
+
+
+<pre class="src src-R"><span class="org-constant">library</span>(ggplot2)
+set.seed(1234)
+df <span class="org-constant">&lt;-</span> data.frame(cond = factor( rep(c(<span class="org-string">"A"</span>,<span class="org-string">"B"</span>), each=200) ), 
+                   rating = c(rnorm(200),rnorm(200, mean=.8)))
+</pre>
+
+
+<p>
+    We use plyr to iterate through and calculate the mean of each group.
+</p>
+
+
+
+<pre class="src src-R"><span class="org-constant">library</span>(plyr)
+cdf <span class="org-constant">&lt;-</span> ddply(df, .(cond), summarise, rating.mean=mean(rating))    
+</pre>
+
+
+<p>
+    Finally, we generate the plot.
+</p>
+
+
+
+<pre class="src src-R">plot <span class="org-constant">&lt;-</span> ggplot(df, aes(x=rating, fill=cond)) +
+    geom_histogram(binwidth=.5, alpha=.5, position=<span class="org-string">"identity"</span>) +
+    geom_vline(data=cdf, aes(xintercept=rating.mean,  colour=cond),
+               linetype=<span class="org-string">"dashed"</span>, size=1)
+
+ggsave(<span class="org-string">'rexample.png'</span>, plot = plot)    
+</pre>
+
+
+
+
+</div>
+
+</div>
+
+<div id="outline-container-2-2-2" class="outline-4">
+<h4 id="sec-2-2-2">Literate R Results</h4>
+<div class="outline-text-4" id="text-2-2-2">
+
+
+<p>
+    The command 'org-babel-tangle' bundles together all three pieces
+    of R and puts them into one file - <a href="example.R">example.R</a>.
+</p>
+</div>
+</div>
+</div>
+</div>
