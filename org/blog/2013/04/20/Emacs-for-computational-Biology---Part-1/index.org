@@ -22,7 +22,7 @@ description: Emacs for science
   parameters were used? I'm obviously going to recommend GNU Emacs, so
   lets get into my reasons
 
-* GNU Emacs Features Useful to Computational Biologists
+* Useful Features
 ** Executable Notes
    My notebook runs the analysis I write and generates results. Here
    are two very simple examples:
