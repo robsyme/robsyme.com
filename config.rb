@@ -27,12 +27,18 @@
 # with_layout :admin do
 #   page "/admin/*"
 # end
+ignore "/org/*"
+
 with_layout :post do
-  page "/projects/*"
   page "/blog/*"
 end
 
-ignore "/org/*"
+require 'orgblog'
+
+activate :custom_blog
+helpers Rob::Helpers
+
+page "/feed.xml", :layout => false
 
 # Proxy (fake) files
 # page "/this-page-has-no-template.html", :proxy => "/template-file.html" do

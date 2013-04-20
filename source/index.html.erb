@@ -3,7 +3,11 @@ layout: front
 ---
 
 <h2>Recent Posts</h2>
+
 <ul>
-  <li><%= link_to '2013-04-16 Example post', '/projects/2013/04/Test Project/index.html' %></li>
-</ul>
+  <% blogposts.each do |post| %>
+    <li> <%= post.nicedate %> <%= link_to post.title, post %> </li>
+  <% end %>
+<ul
+
 </div>
