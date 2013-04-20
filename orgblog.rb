@@ -58,7 +58,7 @@ module Rob
       @all_articles = []
       resources.each do |resource|
         # TODO This path should probably not be hard-coded
-        next unless resource.destination_path =~ /^blog\//
+        next unless resource.destination_path =~ /^blog\/.*\/index.html/
         resource.extend Post
         @all_articles << resource
       end
