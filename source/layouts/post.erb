@@ -34,20 +34,22 @@
             <div class="small-6 large-3 columns"><a href="#">Papers</a></div>
             <div class="small-6 large-3 columns"><a href="#">About</a></div>
           </div>
-        </nav> 
-      </aside>
-      <!-- End Sidebar -->
+        </nav>
 
-      <div class="large-offset-5 large-8 columns" id="content" role="content">
-
-        <div class="markup" style="display: none;">
-           <a href="https://plus.google.com/114214244051573894881?rel=author">Google+</a>
+        <div id="byline" itemscope itemtype="http://data-vocabulary.org/Person">
+          <p>My name is <span itemprop="name">Robert Syme</span>.</p>
+          <p>I'm
+          on <a href="https://plus.google.com/114214244051573894881?rel=author">Google+</a>
+          and <a href="http://twitter.com/robsyme">Twitter</a></p>
         </div>
+
+        </aside>
+        <!-- End Sidebar -->
         
+        <div class="large-offset-5 large-8 columns" id="content" role="content">
+
         <%= yield %>
 
-
-        
         <div id="disqus_thread"></div>
         <script type="text/javascript">
           var disqus_shortname = 'previewrobsyme';
@@ -63,7 +65,6 @@
         <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
       </div>
 
-      
     </div>
 
     <script src="/javascripts/foundation/foundation.js"></script>
