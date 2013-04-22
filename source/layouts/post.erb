@@ -50,7 +50,8 @@
         
         <div class="large-offset-5 large-8 columns" id="content" role="content">
 
-        <%= yield %>
+          <h1><%= current_page.data.title if current_page.data%></h1>
+          <%= yield %>
 
         <div id="disqus_thread"></div>
         <script type="text/javascript">
