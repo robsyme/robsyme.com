@@ -31,7 +31,9 @@ module Rob
       resources + @post_data.all_tags.map do |tag_name, articles|
         path = "blog/categories/#{tag_name}.html"
         tag_page = ::Middleman::Sitemap::Resource.new(@app.sitemap, path)
+
         tag_page.proxy_to('tag.html')
+        @app.ignore('tag.html')
 
         tag_page.add_metadata :locals => {
           'page_type' => 'tag',
