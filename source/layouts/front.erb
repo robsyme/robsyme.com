@@ -5,8 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width" />
-  <title>Ramblings and Miscellany</title>
-
+  <title>On Bioinformatics and Fungal Genomics - <%= current_page.data.title if current_page.data%></title>
   <link rel="alternate" type="application/rss+xml"  href="/rss/feed.xml" title="On Bioinformatics and Fungal Genomics">
   <link rel="stylesheet" href="stylesheets/normalize.css" />
   <link rel="stylesheet" href="stylesheets/front.css" />
@@ -17,29 +16,7 @@
 </head>
 
   <body>
-
-  <div class="row">
-  <div class="small-10 large-10 large-centered small-centered columns wrapper">
-
-    <div class="header">
-      <%= tag :img, :src => "/images/logo_large.gif" %>
-      <h4>Ramblings and miscellany regarding </h4>
-      <h1 id="header">Bioinformatics and Fungal Genomics</h1>
-      <h4>Robert Syme</h4>
-    </div>
-
-    <nav id="front-nav">
-    <ul>
-      <li><a href="#">Blog</a></li>
-      <li><a href="#">Slides</a></li>
-      <li><a href="#">Papers</a></li>
-      <li><a href="#">About</a></li>
-    </ul>
-    </nav>
-    
-
-    <div class="content">
-      <%= yield %>
+    <%= yield %>
   </div>
 </div>
   <script src="js/foundation/foundation.js"></script>

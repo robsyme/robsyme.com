@@ -2,17 +2,17 @@
 @import "settings";
 
 // Comment out this import if you are customizing you imports below
-@import "foundation";
+//@import "foundation";
 
 // Import specific parts of Foundation by commenting the import "foundation"
 // and uncommenting what you want below. You must uncomment the following if customizing
 
-// @import "foundation/foundation-global"; // *always required
-// @import "foundation/components/global"; // *always required
-// @import "foundation/components/grid";
-// @import "foundation/components/visibility";
-//@import "foundation/components/block-grid";
-// @import "foundation/components/type";
+@import "foundation/foundation-global"; // *always required
+@import "foundation/components/global"; // *always required
+@import "foundation/components/grid";
+@import "foundation/components/visibility";
+@import "foundation/components/block-grid";
+@import "foundation/components/type";
 // @import "foundation/components/buttons";
 // @import "foundation/components/forms"; // *requires components/buttons
 // @import "foundation/components/custom-forms"; // *requires components/buttons, components/forms
@@ -56,6 +56,10 @@ $l-black: #222222;
 $dd-grey: #2F343B;
 $d-grey: #7E827A;
 
+@import "front";
+@import "post";
+@import "org-code";
+
 
 body {
     font-family: 'Merriweather', serif;
@@ -77,3 +81,4 @@ video {
 #content p {
     font-size: 0.8em;
 }
+

@@ -31,7 +31,7 @@ module Rob
 
     def manipulate_resource_list(resources)
       resources + @post_data.all_tags.map do |tag_name, articles|
-        path = "blog/categories/#{tag_name}.html"
+        path = "blog/categories/#{tag_name}/index.html"
         tag_page = ::Middleman::Sitemap::Resource.new(@app.sitemap, path)
 
         tag_page.proxy_to('tag.html')

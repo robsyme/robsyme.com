@@ -1,0 +1,9 @@
+<h2>Recent Posts</h2>
+<ul>
+  <% blogposts.each do |post| %>
+  <li>
+    <%= post.nicedate %> <%= link_to post.title, post %>
+  </li>
+  <% end %>
+<ul>
+

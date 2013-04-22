@@ -1,7 +1,6 @@
 $(document).ready(function(){
     $("#table-of-contents").appendTo("aside");
 
-    
     $(".outline-3").waypoint(function(direction) {
         var a = $(this).attr('id');
         var t = a.replace("outline-container", "#sec");

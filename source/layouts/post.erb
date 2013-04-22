@@ -1,102 +1,53 @@
-<!DOCTYPE html>
-<!--[if IE 8]>         <html class="no-js lt-ie9" lang="en"> <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
+<% wrap_layout :site do %>
+<div class="row">
 
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width" />
-    <title>Ramblings and Miscellany</title>
-
-    <link rel="stylesheet" href="/stylesheets/normalize.css" />
-    <link rel="stylesheet" href="/stylesheets/post.css" />
-    <link rel="stylesheet" href="/stylesheets/org-code.css" />
-    <link href='http://fonts.googleapis.com/css?family=Merriweather:400,700|Old+Standard+TT:400,700' rel='stylesheet' type='text/css'>
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-    <script src="/javascripts/vendor/custom.modernizr.js"></script>
-    <script src="/javascripts/vendor/waypoints.js"></script>
-    <script src="/javascripts/vendor/zepto.js"></script>
-    <script src="/javascripts/post.js"></script>
-    <link href="http://vjs.zencdn.net/c/video-js.css" rel="stylesheet">
-    <!-- <script src="http://vjs.zencdn.net/c/video.js"></script> -->
-  </head>
-
-  <body>
-    <div class="row">
-
-      <!-- Sidebar -->
-      <aside id="sidebar" class="large-4 columns">
-        <a href="/">
-          <%= image_tag '/images/05_glass_100px.png', :id => 'logo' %>
-        </a>
-        <br>
-        <nav>
-          <div class="row side-navigation text-center">
-            <div class="small-6 large-3 columns"><a href="#">Blog</a></div>
-            <div class="small-6 large-3 columns"><a href="#">Slides</a></div>
-            <div class="small-6 large-3 columns"><a href="#">Papers</a></div>
-            <div class="small-6 large-3 columns"><a href="#">About</a></div>
-          </div>
-        </nav>
-
-        <div id="byline" itemscope itemtype="http://data-vocabulary.org/Person">
-          <p>My name is <span itemprop="name">Robert Syme</span>.</p>
-          <p>I'm
-          on <a href="https://plus.google.com/114214244051573894881?rel=author">Google+</a>
-          and <a href="http://twitter.com/robsyme">Twitter</a></p>
-        </div>
-
-        </aside>
-        <!-- End Sidebar -->
-        
-        <div class="large-offset-5 large-8 columns" id="content" role="content">
-
-          <h1><%= current_page.data.title if current_page.data%></h1>
-          <%= yield %>
-
-        <div id="disqus_thread"></div>
-        <script type="text/javascript">
-          var disqus_shortname = 'previewrobsyme';
-
-          /* * * DON'T EDIT BELOW THIS LINE * * */
-          (function() {
-          var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-          dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-          })();
-        </script>
-        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
-      </div>
-
+  <aside id="sidebar" class="large-4 columns">
+    <a href="/">
+      <%= image_tag '/images/05_glass_100px.png', :id => 'logo' %>
+    </a>
+    <div id="byline" itemscope itemtype="http://data-vocabulary.org/Person">
+      <p><span itemprop="name">Robert Syme</span><br /> I'm
+        on <a href="https://plus.google.com/114214244051573894881?rel=author">Google+</a>
+        and <a href="http://twitter.com/robsyme">Twitter</a></p>
     </div>
+    <nav>
+      <div class="row side-navigation text-center">
+        <div class="small-6 large-3 columns"><a href="/blog">Blog</a></div>
+        <div class="small-6 large-3 columns"><a href="/slides">Slides</a></div>
+        <div class="small-6 large-3 columns"><a href="/papers">Papers</a></div>
+        <div class="small-6 large-3 columns"><a href="/about">About</a></div>
+      </div>
+    </nav>
 
-    <script src="/javascripts/foundation/foundation.js"></script>
-    <script src="/javascripts/foundation/foundation.alerts.js"></script>
-    <script src="/javascripts/foundation/foundation.cookie.js"></script>
-    <script src="/javascripts/foundation/foundation.forms.js"></script>
-    <script src="/javascripts/foundation/foundation.placeholder.js"></script>
-    <!-- <script src="js/foundation/foundation.orbit.js"></script> -->
-    <!-- <script src="js/foundation/foundation.topbar.js"></script> -->
-    <!-- <script src="js/foundation/foundation.clearing.js"></script> -->
-    <!-- <script src="js/foundation/foundation.dropdown.js"></script> -->
-    <!-- <script src="js/foundation/foundation.joyride.js"></script> -->
-    <!-- <script src="js/foundation/foundation.magellan.js"></script> -->
-    <!-- <script src="js/foundation/foundation.reveal.js"></script> -->
-    <!-- <script src="js/foundation/foundation.section.js"></script> -->
-    <!-- <script src="js/foundation/foundation.tooltips.js"></script> -->
-    <script>
-      $(document).foundation();
-    </script>
+    <h1><%= current_page.data.title if current_page.data%></h1>
     
-  <script>
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
-  ga('create', 'UA-9748707-7', 'robsyme.com');
-  ga('send', 'pageview');
+    <div id="tags">
+      <ul>
+        <% current_page.tags.each do |tag| %>
+        <li><%= link_to(tag, "/blog/categories/#{tag}") %></li>
+        <% end %>
+      </ul>
+    </div>
+  </aside>
   
-  </script>
-  </body>
-</html>
+  <div class="large-offset-5 large-8 columns" id="content" role="content">
+
+    <h1><%= current_page.data.title if current_page.data%></h1>
+
+    <%= yield %>
+
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+      var disqus_shortname = 'previewrobsyme';
+      (function() {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+  </div>
+
+</div>
+<% end %>

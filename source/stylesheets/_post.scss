@@ -1,5 +1,3 @@
-@import "app";
-
 #content {
     border-top: 7px solid $dd-grey;
     padding-top: 1%;
@@ -14,9 +12,27 @@
 }
 
 #byline {
+    text-align: center;
     font-size: 0.75em;
     color: $d-grey;
-    margin: 10px 0px;
+    margin: 5px 0px;
+}
+
+#sidebar h1 {
+    padding-top: 20px;
+    font-weight: 700;
+    font-size: 1.25em;
+}
+
+#tags li {
+    font-size: 0.75em;
+    display: inline;
+    list-style-type: none;
+}
+
+#tags ul:before {
+    font-size: 0.75em;
+    content: "Tags: ";
 }
 
 #table-of-contents h2 {
@@ -66,8 +82,13 @@
     display: block;
 }
 
+.side-navigation {
+    border-top: 1px dotted #7e827a;
+    border-bottom: 1px dotted #7e827a;
+}
+
 .side-navigation > div {
-    padding-bottom: 10px;
+    padding: 15px 0;
 }
 
 #sidebar a {

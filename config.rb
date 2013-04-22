@@ -29,8 +29,16 @@
 # end
 ignore "/org/*"
 
+with_layout :basic do
+  page "blog/categories/*"
+  page "blog/index.html"
+  page "slides/index.html"
+  page "papers/index.html"
+  page "about/index.html"
+end
+
 with_layout :post do
-  page "/blog/*"
+  page "/blog/2013/*"
 end
 
 require 'orgblog'

@@ -1,13 +1,41 @@
 ---
-layout: front
+layout: site
 ---
 
-<h2>Recent Posts</h2>
+<div class="row">
+  <div class="small-10 large-10 large-centered small-centered columns wrapper">
 
-<ul>
-  <% blogposts.each do |post| %>
-    <li> <%= post.nicedate %> <%= link_to post.title, post %> </li>
-  <% end %>
-<ul
+    <div class="header">
+      <%= tag :img, :src => "/images/logo_large.gif" %>
+      <h4>Ramblings and miscellany regarding </h4>
+      <h1 id="header">Bioinformatics and Fungal Genomics</h1>
+      <h4>Robert Syme</h4>
+    </div>
 
-</div>
+    <nav id="front-nav">
+      <ul>
+        <li><a href="/blog">Blog</a></li>
+        <li><a href="/slides">Slides</a></li>
+        <li><a href="/papers">Papers</a></li>
+        <li><a href="/about">About</a></li>
+      </ul>
+    </nav>
+
+    
+    
+    <div class="content">
+
+      <p>I'm a PhD student trying to understand crop disease by
+sequencing pathogen genomes. This is my new place on the web.</p>
+
+      <h2>Recent Posts</h2>
+      <ul>
+        <% blogposts.each do |post| %>
+        <li> <%= post.nicedate %> <%= link_to post.title, post %> </li>
+        <% end %>
+        <ul>
+    </div>
+    
+  </div> <!-- small-10 large-10 large-centered small-centered columns wrapper -->
+</div> <!-- row -->
+
