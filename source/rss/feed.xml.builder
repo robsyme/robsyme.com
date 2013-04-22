@@ -3,8 +3,8 @@ xml.feed "xmlns" => "http://www.w3.org/2005/Atom" do
   xml.title "On Bioinformatics and Fungal Genomics"
   xml.subtitle "Ramblings and Miscellany"
   xml.id "http://robsyme.com/"
-  xml.link "href" => "http://robsyme.com/blog"
-  xml.link "href" => "http://robsyme.com/feed.xml", "rel" => "self"
+  xml.link "href" => "http://robsyme.com/"
+  xml.link "href" => "http://robsyme.com/rss/feed.xml", "rel" => "self"
   xml.updated blogposts.first.date.to_time.iso8601
   xml.author { xml.name "Rob Syme" }
 

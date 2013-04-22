@@ -30,7 +30,7 @@ module Rack
 end
 
 use Rack::Deflater
-use Rack::TryStatic, :root => "build", :urls => %w[/], :try => ['.html', 'index.html', '/index.html', 'index.xml', '/index.xml']
+use Rack::TryStatic, :root => "build", :urls => %w[/], :try => ['.html', 'index.html', '/index.html', 'feed.xml', '/feed.xml']
 
 
 

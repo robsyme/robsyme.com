@@ -34,11 +34,10 @@ with_layout :post do
 end
 
 require 'orgblog'
-
 activate :custom_blog
 helpers Rob::Helpers
 
-page "/feed/index.xml", :layout => false
+page "/rss/feed.xml", :layout => false
 
 # Proxy (fake) files
 # page "/this-page-has-no-template.html", :proxy => "/template-file.html" do

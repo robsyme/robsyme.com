@@ -125,7 +125,7 @@ module Rob
         next if attribute.value =~ /^\//
         attribute.value = @app.http_prefix + File.dirname(destination_path) + "/" + attribute.value
       end
-      html.to_s
+      html.xpath("//body/*").to_s
     end
   end
 end
