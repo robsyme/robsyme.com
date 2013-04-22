@@ -118,7 +118,6 @@ module Rob
     end
 
     def absolutize_links(body)
-      $stderr.puts "DUMPING HTML"
       html = ::Nokogiri::HTML(body)
       html.xpath("//@src | //@href | //@poster").each do |attribute|
         next if attribute.value =~ /^http:/
