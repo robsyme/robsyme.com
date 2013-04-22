@@ -2,7 +2,11 @@
 
 #content {
     border-top: 7px solid $dd-grey;
-    padding-top: 2%;
+    padding-top: 1%;
+}
+
+#content h1 {
+    padding-bottom: 30px
 }
 
 #content h1 h2 h3 {
@@ -42,6 +46,7 @@
     #sidebar {
         position: fixed; top: 0; bottom: 0; left: 0; overflow-x: hidden;
         border-top: 7px solid $dd-grey;
+        padding-top: 1%;
     }
 
     #table-of-contents .outline-3-scroll-selected {
