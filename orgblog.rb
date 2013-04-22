@@ -1,3 +1,5 @@
+require 'nokogiri'
+
 module Rob
 
   class << self
@@ -112,7 +114,19 @@ module Rob
     end
 
     def body
-      render(:layout => false)
+      absolutize_links(render(:layout => false))
+    end
+
+    def absolutize_links(body)
+      $stderr.puts "DUMPING HTML"
+      html = ::Nokogiri::HTML(body)
+      html.xpath("//@src | //@href | //@poster").each do |attribute|
+        next if attribute.value =~ /^http:/
+        next if attribute.value =~ /^#/
+        next if attribute.value =~ /^\//
+        attribute.value = @app.http_prefix + File.dirname(destination_path) + "/" + attribute.value
+      end
+      html.to_s
     end
   end
 end
