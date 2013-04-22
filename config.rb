@@ -80,6 +80,9 @@ configure :build do
   # Minify Javascript on build
   activate :minify_javascript
 
+  # Create favicons
+  activate :favicon_maker
+
   # Enable cache buster
   # activate :cache_buster
 
