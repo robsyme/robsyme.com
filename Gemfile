@@ -8,3 +8,4 @@ gem 'rb-inotify', '~> 0.9'
 gem 'middleman-livereload', '~> 3.0.1'
 gem 'middleman-smusher', '~> 3.0.0'
 gem 'builder', '~> 3.0.0'
+gem "middleman-favicon-maker", "~> 3.2"
