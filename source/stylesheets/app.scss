@@ -78,7 +78,11 @@ video {
     height: auto;
 }
 
-#content p {
+#content p, ul{
     font-size: 0.8em;
+}
+
+#content ul {
+    list-style-position: inside;
 }
 
