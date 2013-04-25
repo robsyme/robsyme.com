@@ -32,7 +32,7 @@ end
 require 'rack-rewrite'
 
 use Rack::Rewrite do
-  301 '/blog/2012/11/28/',  '/blog/2013/04/20/Emacs-for-computational-Biology---Part-1/'
+  r301 '/blog/2012/11/28/',  '/blog/2013/04/20/Emacs-for-computational-Biology---Part-1/'
 end
 
 use Rack::Deflater
