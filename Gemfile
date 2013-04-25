@@ -9,3 +9,4 @@ gem 'middleman-livereload', '~> 3.0.1'
 gem 'middleman-smusher', '~> 3.0.0'
 gem 'builder', '~> 3.0.0'
 gem "middleman-favicon-maker", "~> 3.2"
+gem 'rack-rewrite', '~> 1.3.3'
