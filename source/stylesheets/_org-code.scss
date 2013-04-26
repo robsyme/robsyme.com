@@ -9,6 +9,11 @@ pre {
     overflow: auto;
 }
 
+.coderef-off,coderef-on {
+    transition: background-color 0.25s;
+    -webkit-transition: background-color 0.25s;
+}
+
 .src {
     color: #eeeeec;
     border: 1px solid;
