@@ -1,0 +1,242 @@
+---
+title: Blogging from your text editor with orgmode and middleman
+tags: emacs lisp ruby orgmode middleman
+description: How to write blog posts in emacs orgmode for a ruby static site generator.
+---
+
+
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#sec-1">1 Introduction</a></li>
+<li><a href="#sec-2">2 Components</a></li>
+<li><a href="#sec-3">3 Trying this at home</a>
+<ul>
+<li><a href="#sec-3-1">3.1 Creating a new post</a></li>
+<li><a href="#sec-3-2">3.2 Org-publish</a></li>
+<li><a href="#sec-3-3">3.3 Middleman</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-1" class="outline-2">
+<h2 id="sec-1">Introduction</h2>
+<div class="outline-text-2" id="text-1">
+
+
+<p>  
+  Before setting up this blog, I used emacs but had never really
+  written any lisp. This post details some serious <a href="http://blog.hasmanythrough.com/2012/1/4/yak-shaving">yak shaving</a>, but it
+  did give me a good excuse to write some lisp and some shitty web
+  design.
+</p>
+<p>  
+  I'm not suggesting that this is the most efficient way to publish
+  words and pictures on the internet. This is simply a description of
+  how I'm doing it at the moment.
+</p>
+</div>
+
+</div>
+
+<div id="outline-container-2" class="outline-2">
+<h2 id="sec-2">Components</h2>
+<div class="outline-text-2" id="text-2">
+
+
+<p>  
+  <img src="resources/workflow_overview.png"  alt="resources/workflow_overview.png" />
+</p>
+<p>  
+  Posts are composed in Emacs.
+</p>
+<p>
+  A keystroke <a href="http://orgmode.org/guide/Publishing.html#Publishing">publishes</a> the post to a directory that is part of a git
+  repo. Publishing to the web is simply 'git commit' and 'git push
+  heroku'. <a href="https://www.heroku.com/">Heroku</a> builds the static <a href="http://middlemanapp.com/">Middleman</a> static site, which
+  includes our published org files.
+</p>
+</div>
+
+</div>
+
+<div id="outline-container-3" class="outline-2">
+<h2 id="sec-3">Trying this at home</h2>
+<div class="outline-text-2" id="text-3">
+
+
+<p>  
+  You can view the code for both <a href="http://github.com/robsyme/robsyme.com">the site</a> and my <a href="http://github.com/robsyme/emacs.d/">emacs configuration</a>
+  if you are really keen, but I'll sketch the outline here so you can
+  build something similar if you feel inspired.
+</p>
+<p>
+  The workflow above is something of a simplification. The real
+  approach is more like this:
+</p>
+<p>
+  <img src="resources/workflow_better.png"  alt="resources/workflow_better.png" />
+</p>
+
+
+</div>
+
+<div id="outline-container-3-1" class="outline-3">
+<h3 id="sec-3-1">Creating a new post</h3>
+<div class="outline-text-3" id="text-3-1">
+
+
+<p>
+   I'm going to assume that you have <a href="http://www.gnu.org/software/emacs/">emacs</a> and the <a href="http://orgmode.org/">org package</a> alrady installed.
+</p>
+<p>
+   I use org <a href="http://orgmode.org/manual/Capture-templates.html">capture templates</a> to kick off a new post. My capture
+   templates variable looks like this:
+</p>
+
+
+
+<pre class="src src-elisp">(setq org-capture-templates
+      '((<span class="org-string">"t"</span> <span class="org-string">"Todo (unsorted)"</span> entry (file+headline org-default-notes-file <span class="org-string">"Unsorted Tasks"</span>)
+         <span class="org-string">"* </span><span class="org-warning">TODO</span><span class="org-string"> %?\n  %i\n  %a"</span>)
+        (<span class="org-string">"b"</span> <span class="org-string">"Blog draft"</span> entry (file (choose-new-post <span class="org-string">"~/site/org/blog/"</span>))
+         <span class="org-string">"\n* </span><span class="org-warning">TODO</span><span class="org-string"> %?\n"</span>)
+        (<span class="org-string">"p"</span> <span class="org-string">"Project Entry"</span> entry (file (choose-project-file))
+         <span class="org-string">"* </span><span class="org-warning">TODO</span><span class="org-string"> %?\n  %i\n  %a\n\n"</span>)))
+</pre>
+
+
+<p>
+   Where I have a function 'choose-new-post which looks like this:
+</p>
+
+
+
+<pre class="src src-elisp">(<span class="org-keyword">defun</span> <span class="org-function-name">choose-blog-file</span> (base-path)
+  <span class="org-doc">"Finds the project file, creating one if it doesn't already exist"</span>
+<span id="coderef-date" class="coderef-off">  (<span class="org-keyword">let*</span> ((date (org-read-date <span class="org-string">""</span> 'totime nil nil (current-time) <span class="org-string">""</span>)) <span class="org-comment-delimiter">;;</span><span class="org-comment">(date)</span></span>
+<span id="coderef-title" class="coderef-off">         (title (read-string <span class="org-string">"Post title: "</span>))                       <span class="org-comment-delimiter">;;</span><span class="org-comment">(title)</span></span>
+<span id="coderef-url" class="coderef-off">         (url-title (replace-regexp-in-string <span class="org-string">"\s+"</span> <span class="org-string">"-"</span> title))       <span class="org-comment-delimiter">;;</span><span class="org-comment">(url)</span></span>
+<span id="coderef-path" class="coderef-off">         (path (format <span class="org-string">"%s/%s/%s/index.org"</span> base-path (format-time-string <span class="org-string">"%Y/%m/%d"</span>) url-title))) <span class="org-comment-delimiter">;;</span><span class="org-comment">(path)</span></span>
+    (make-directory (file-name-directory path) t)
+    (append-to-file (format <span class="org-string">"#+begin_html\n---\ntitle: %s\ntags: \ndescription: \n---\n#+end_html\n\n"</span> title) nil path)
+    path))   
+</pre>
+
+
+<p>
+   The function: 
+</p><ul>
+<li><a href="#coderef-date" class="coderef" onmouseover="CodeHighlightOn(this, 'coderef-date');" onmouseout="CodeHighlightOff(this, 'coderef-date');">sets a variable 'date'</a> to a day of the user's chossing.
+</li>
+<li><a href="#coderef-title" class="coderef" onmouseover="CodeHighlightOn(this, 'coderef-title');" onmouseout="CodeHighlightOff(this, 'coderef-title');">gets a working title</a> and set the variable 'title'. 
+</li>
+<li><a href="#coderef-url" class="coderef" onmouseover="CodeHighlightOn(this, 'coderef-url');" onmouseout="CodeHighlightOff(this, 'coderef-url');">gets a url-friendly title</a> by replacing spaces with "-".
+</li>
+<li><a href="#coderef-path" class="coderef" onmouseover="CodeHighlightOn(this, 'coderef-path');" onmouseout="CodeHighlightOff(this, 'coderef-path');">composes a path</a> based on the base-path given.
+</li>
+</ul>
+
+
+<p>         
+   The 'Todo' and 'Project Entry' templates are for other uses, but
+   the 'Blog draft' entry ensures that pressing "Ctrl-C, C" ("C-c c"
+   in emacs-speak) takes me directly to a new file (the filename
+   returned by the function 'choose-new-post')
+</p>
+
+
+  <video id="vid_codeblock" class="video-js vjs-default-skin" controls
+         preload="auto" poster="https://s3.amazonaws.com/www.robsyme.com/resources/2013-04-23/new_post.jpg"
+         data-setup="{}" width="1008" height="464">
+    <source src="https://s3.amazonaws.com/www.robsyme.com/resources/2013-04-23/new_post.mp4" type='video/mp4'>
+      <source src="https://s3.amazonaws.com/www.robsyme.com/resources/2013-04-23/new_post.ogv" type='video/ogg'>
+  </video>
+
+</div>
+
+</div>
+
+<div id="outline-container-3-2" class="outline-3">
+<h3 id="sec-3-2">Org-publish</h3>
+<div class="outline-text-3" id="text-3-2">
+
+<p>   Somewhere within your emacs configuration, you need to set the
+   variable 'org-publish-project-alist' to something like:
+</p>
+
+
+
+<pre class="src src-elisp">(setq org-publish-project-alist
+      '(( <span class="org-string">"blog"</span>
+<span id="coderef-base-dir" class="coderef-off">          <span class="org-builtin">:base-directory</span> <span class="org-string">"~/site/org/blog/"</span>                     <span class="org-comment-delimiter">;;</span><span class="org-comment">(base-dir)</span></span>
+<span id="coderef-base-ext" class="coderef-off">          <span class="org-builtin">:base-extension</span> <span class="org-string">"org"</span>                                  <span class="org-comment-delimiter">;;</span><span class="org-comment">(base-ext)</span></span>
+<span id="coderef-pub-dir" class="coderef-off">          <span class="org-builtin">:publishing-directory</span> <span class="org-string">"~/site/source/blog/"</span>             <span class="org-comment-delimiter">;;</span><span class="org-comment">(pub-dir)</span></span>
+<span id="coderef-rec" class="coderef-off">          <span class="org-builtin">:recursive</span> t                                                <span class="org-comment-delimiter">;;</span><span class="org-comment">(rec)</span></span>
+<span id="coderef-body" class="coderef-off">          <span class="org-builtin">:body-only</span> t                                               <span class="org-comment-delimiter">;;</span><span class="org-comment">(body)</span></span>
+<span id="coderef-html-ext" class="coderef-off">          <span class="org-builtin">:html-extension</span> <span class="org-string">"html.erb"</span>                             <span class="org-comment-delimiter">;;</span><span class="org-comment">(html-ext)</span></span>
+          <span class="org-builtin">:publish-function</span> org-publish-org-to-html)
+<span id="coderef-static" class="coderef-off">        ( <span class="org-string">"blog-static"</span>                                            <span class="org-comment-delimiter">;;</span><span class="org-comment">(static)</span></span>
+          <span class="org-builtin">:base-directory</span> <span class="org-string">"~/site/org/blog/"</span>
+          <span class="org-builtin">:base-extension</span> <span class="org-string">"png</span><span class="org-string"><span class="org-regexp-grouping-backslash">\\</span></span><span class="org-string"><span class="org-regexp-grouping-construct">|</span></span><span class="org-string">jpg</span><span class="org-string"><span class="org-regexp-grouping-backslash">\\</span></span><span class="org-string"><span class="org-regexp-grouping-construct">|</span></span><span class="org-string">gif"</span>
+          <span class="org-builtin">:publishing-directory</span> <span class="org-string">"~/site/source/blog/"</span>
+          <span class="org-builtin">:recursive</span> t
+          <span class="org-builtin">:publish-function</span> org-publish-attachment)
+<span id="coderef-whole" class="coderef-off">        (<span class="org-string">"whole"</span> <span class="org-builtin">:components</span> (<span class="org-string">"blog"</span> <span class="org-string">"blog-static"</span>))))              <span class="org-comment-delimiter">;;</span><span class="org-comment">(whole)</span></span>
+</pre>
+
+
+<p>
+   What this does is take all <a href="#coderef-base-ext" class="coderef" onmouseover="CodeHighlightOn(this, 'coderef-base-ext');" onmouseout="CodeHighlightOff(this, 'coderef-base-ext');">org files</a> from the <a href="#coderef-base-dir" class="coderef" onmouseover="CodeHighlightOn(this, 'coderef-base-dir');" onmouseout="CodeHighlightOff(this, 'coderef-base-dir');">base directory</a>,
+   publish <a href="#coderef-body" class="coderef" onmouseover="CodeHighlightOn(this, 'coderef-body');" onmouseout="CodeHighlightOff(this, 'coderef-body');">only the body</a> (I use Middleman to wrap all of the content
+   up) and dump the resulting html in the <a href="#coderef-pub-dir" class="coderef" onmouseover="CodeHighlightOn(this, 'coderef-pub-dir');" onmouseout="CodeHighlightOff(this, 'coderef-pub-dir');">publishing directory</a>.
+</p>
+<p>   
+   The publish directory is the source directory of a Middleman
+   application, so the resulting html (or html.erb) is used as the
+   content for the static site.
+</p>
+<p>
+   I also configure <a href="#coderef-whole" class="coderef" onmouseover="CodeHighlightOn(this, 'coderef-whole');" onmouseout="CodeHighlightOff(this, 'coderef-whole');">a shortcut</a> to publish both the static resources
+   and the org files with only one command.
+</p>
+<p>
+   The org-publish will render each of the org files in the base
+   directory to html. It will generate a table of contents and wrap
+   all of the source code in appropriate tags (see the source of the
+   code block above).
+</p>
+</div>
+
+</div>
+
+<div id="outline-container-3-3" class="outline-3">
+<h3 id="sec-3-3">Middleman</h3>
+<div class="outline-text-3" id="text-3-3">
+
+
+<p>
+   Middleman has an excellent blogging plugin, but it manages the
+   directory structure itself. It is useful if your posts contain no
+   attachments. If you have posts that contain relative links to
+   external files (mine do), the links will break when middleman
+   constructs the new site structure.
+</p>
+<p>
+   I'm using the same setup for my lab notebook which
+   includes lots of attached files, so I had to roll my own
+   stipped-back version.
+</p>
+<p>
+   All of the lifting is done by the classes in <a href="http://github.com/robsyme/robsyme.com/blob/master/orgblog.rb">orgblog.rb</a>. A writeup
+   of the Middleman configuration will have to wait for another time.
+</p>
+
+
+
+</div>
+</div>
+</div>
