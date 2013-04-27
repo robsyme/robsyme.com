@@ -27,7 +27,12 @@ pre {
 }
 
 .code-highlighted {
-    background-color: #ffff00;
+    //background-color: #ffff00;
+    background-color: rgb(111, 111, 111);
+}
+
+a.code-highlighted {
+    color: #FFFFFF;
 }
 
 .example {

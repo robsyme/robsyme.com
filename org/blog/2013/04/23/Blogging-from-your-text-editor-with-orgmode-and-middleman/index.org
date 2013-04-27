@@ -1,0 +1,192 @@
+#+BEGIN_HTML
+---
+title: Blogging from your text editor with orgmode and middleman
+tags: emacs lisp ruby orgmode middleman
+description: How to write blog posts in emacs orgmode for a ruby static site generator.
+---
+#+END_HTML
+
+* Introduction
+
+  Before setting up this blog, I used emacs but had never really
+  written any lisp. This post details some serious [[http://blog.hasmanythrough.com/2012/1/4/yak-shaving][yak shaving]], but it
+  did give me a good excuse to write some lisp and some shitty web
+  design.
+
+  I'm not suggesting that this is the most efficient way to publish
+  words and pictures on the internet. This is simply a description of
+  how I'm doing it at the moment.
+
+* Components
+
+  [[file:resources/workflow_overview.png]]
+
+  Posts are composed in Emacs.
+
+  A keystroke [[http://orgmode.org/guide/Publishing.html#Publishing][publishes]] the post to a directory that is part of a git
+  repo. Publishing to the web is simply 'git commit' and 'git push
+  heroku'. [[https://www.heroku.com/][Heroku]] builds the static [[http://middlemanapp.com/][Middleman]] static site, which
+  includes our published org files.
+
+* Trying this at home
+
+  You can view the code for both [[http://github.com/robsyme/robsyme.com][the site]] and my [[http://github.com/robsyme/emacs.d/][emacs configuration]]
+  if you are really keen, but I'll sketch the outline here so you can
+  build something similar if you feel inspired.
+
+  The workflow above is something of a simplification. The real
+  approach is more like this:
+
+  [[file:resources/workflow_better.png]]
+
+
+** Creating a new post
+
+   I'm going to assume that you have [[http://www.gnu.org/software/emacs/][emacs]] and the [[http://orgmode.org/][org package]] alrady installed.
+
+   I use org [[http://orgmode.org/manual/Capture-templates.html][capture templates]] to kick off a new post. My capture
+   templates variable looks like this:
+
+   #+BEGIN_SRC elisp :eval never
+     (setq org-capture-templates
+           '(("t" "Todo (unsorted)" entry (file+headline org-default-notes-file "Unsorted Tasks")
+              "* TODO %?\n  %i\n  %a")
+             ("b" "Blog draft" entry (file (choose-new-post "~/site/org/blog/"))
+              "\n* TODO %?\n")
+             ("p" "Project Entry" entry (file (choose-project-file))
+              "* TODO %?\n  %i\n  %a\n\n")))
+   #+END_SRC
+
+   Where I have a function 'choose-new-post which looks like this:
+
+   #+BEGIN_SRC elisp :eval never
+     (defun choose-blog-file (base-path)
+       "Finds the project file, creating one if it doesn't already exist"
+       (let* ((date (org-read-date "" 'totime nil nil (current-time) "")) ;;(ref:date)
+              (title (read-string "Post title: "))                       ;;(ref:title)
+              (url-title (replace-regexp-in-string "\s+" "-" title))       ;;(ref:url)
+              (path (format "%s/%s/%s/index.org" base-path (format-time-string "%Y/%m/%d") url-title))) ;;(ref:path)
+         (make-directory (file-name-directory path) t)
+         (append-to-file (format "#+begin_html\n---\ntitle: %s\ntags: \ndescription: \n---\n#+end_html\n\n" title) nil path)
+         path))
+   #+END_SRC
+
+   The function:
+   - [[(date)][sets a variable 'date']] to a day of the user's chossing.
+   - [[(title)][gets a working title]] and set the variable 'title'.
+   - [[(url)][gets a url-friendly title]] by replacing spaces with "-".
+   - [[(path)][composes a path]] based on the base-path given.
+
+   The 'Todo' and 'Project Entry' templates are for other uses, but
+   the 'Blog draft' entry ensures that pressing "Ctrl-C, C" ("C-c c"
+   in emacs-speak) and then "b" takes me directly to a new file (the
+   filename returned by the function 'choose-new-post')
+
+#+BEGIN_HTML
+  <video id="vid_codeblock" class="video-js vjs-default-skin" controls
+         preload="auto" poster="https://s3.amazonaws.com/www.robsyme.com/resources/2013-04-23/new_post.jpg"
+         data-setup="{}" width="1008" height="464">
+    <source src="https://s3.amazonaws.com/www.robsyme.com/resources/2013-04-23/new_post.mp4" type='video/mp4'>
+      <source src="https://s3.amazonaws.com/www.robsyme.com/resources/2013-04-23/new_post.ogv" type='video/ogg'>
+  </video>
+#+END_HTML
+
+** Org-publish
+   Somewhere within your emacs configuration, you need to set the
+   variable 'org-publish-project-alist' to something like:
+
+   #+BEGIN_SRC elisp :eval never :comments org
+     (setq org-publish-project-alist
+           '(( "blog"
+               :base-directory "~/site/org/blog/"                     ;;(ref:base-dir)
+               :base-extension "org"                                  ;;(ref:base-ext)
+               :publishing-directory "~/site/source/blog/"             ;;(ref:pub-dir)
+               :recursive t                                                ;;(ref:rec)
+               :body-only t                                               ;;(ref:body)
+               :html-extension "html.erb"                             ;;(ref:html-ext)
+               :publish-function org-publish-org-to-html)
+             ( "blog-static"                                            ;;(ref:static)
+               :base-directory "~/site/org/blog/"
+               :base-extension "png\\|jpg\\|gif"
+               :publishing-directory "~/site/source/blog/"
+               :recursive t
+               :publish-function org-publish-attachment)
+             ("whole" :components ("blog" "blog-static"))))              ;;(ref:whole)
+   #+END_SRC
+
+   What this does is take all [[(base-ext)][org files]] from the [[(base-dir)][base directory]],
+   publish [[(body)][only the body]] (I use Middleman to wrap all of the content
+   up) and dump the resulting html in the [[(pub-dir)][publishing directory]].
+
+   The publish directory is the source directory of a Middleman
+   application, so the resulting html (or html.erb) is used as the
+   content for the static site.
+
+   I also configure [[(whole)][a shortcut]] to publish both the static resources
+   and the org files with only one command.
+
+   The org-publish will render each of the org files in the base
+   directory to html. It will generate a table of contents and wrap
+   all of the source code in appropriate tags (see the source of the
+   code block above).
+
+** Middleman
+
+   Middleman has an excellent blogging plugin, but it manages the
+   directory structure itself. It is useful if your posts contain no
+   attachments. If you have posts that contain relative links to
+   external files (mine do), the links will break when middleman
+   constructs the new site structure.
+
+   I'm using the same setup for my lab notebook which
+   includes lots of attached files, so I had to roll my own
+   stipped-back version.
+
+   All of the lifting is done by the classes in [[http://github.com/robsyme/robsyme.com/blob/master/orgblog.rb][orgblog.rb]]. A writeup
+   of the Middleman configuration will have to wait for another time.
+
+* COMMENT Good things
+
+  Things I like about doing it this way.
+
+** Emacs
+   - It's free.
+   - I like being able to run code and capture both the input and the
+     output for publishing.
+   - I write my lab notebook the same way, published on a non-public
+     server.
+   - Writing code for publication happens in the same way that I would
+     write it if it wasn't being published. Reducing this friction
+     makes keeping good notes much more lilkely.
+   - Links, syntax highlighting, document structure, keywords and even
+     [[file:~/site/org/blog/2013/04/20/Emacs-for-computational-Biology---Part-1/index.org][code evaluation]] are taken care of by org mode.
+   - Everything is in plain text, so it can be easily checked into
+     version control.
+** Middleman
+   - It's free.
+   - You get the benefits of a static site (particularly when you put
+     something like Cloudflare in front), but you can also bolt on
+     other rack objects if you need more dynamic bits.
+   - The kind robots at Heroku build it for me.
+   - The addition of "activate :livereload" to the configuration
+     hooks into the [[http://livereload.com/][LiveReload]] browser extensions to refresh the page
+     whenever you make a change (in development).
+   - Configurable with a bit of ruby. There is a middleman-blog gem,
+     but I only needed a subset of the features (tags), so I just
+     [[http://github.com/robsyme/robsyme.com/blob/master/orgblog.rb][wrote my own]].
+   - Do your own design. I think web design is an excellent 21st
+     century hobby, so I built this by hand on top of the [[http://foundation.zurb.com/][Foundation]]
+     framework.
+** Heroku
+   - It's free (for small projects like this).
+   - Heroku builds the site, so all I have to do is 'git push', which
+     is what I would do anyway.
+   - You can manage drafts by creating and merging branches.
+
+* COMMENT Bad things
+
+  Things that aren't all rainbows and unicorns.
+
+** Overview
+   - You will probably need to write some ruby.
+   - You will probably need to write some emacs lisp.
